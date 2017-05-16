@@ -31,6 +31,9 @@
     <Property Id="PMSCONNECTIONSTRINGVALUE" Value="pbx://none">
       <RegistrySearch Id="PMSConnectionStringLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw" Name="PMSConnectionString" />
     </Property>
+    <Property Id="RABBITSERVICEDEPENDENCYVALUE" Value="RabbitMQ">
+      <RegistrySearch Id="RabbitServiceDependencyLookup" Root="HKLM" Key="SYSTEM\CurrentControlSet\Services\HOLMSPBXConnectorService" Type="raw" Name="DependOnService" />
+    </Property>
     
     <DirectoryRef Id="TARGETDIR">
       <Component Id="RegistrySettings" Guid="E9CE6A56-10F1-4A0F-9A49-8D3C3A8504EC" Permanent="yes">
@@ -41,6 +44,9 @@
           <RegistryValue Type="string" Name="ServicePassword" Value="[SERVICEPASSWORDVALUE]" />
           <RegistryValue Type="string" Name="SMDRConnectionString" Value="[SMDRCONNECTIONSTRINGVALUE]" />
           <RegistryValue Type="string" Name="PMSConnectionString" Value="[PMSCONNECTIONSTRINGVALUE]" />
+        </RegistryKey>
+        <RegistryKey Root="HKLM" Key ="SYSTEM\CurrentControlSet\Services\HOLMSSchedulerService">
+          <RegistryValue Type="multiString" Name="DependOnService" Value="[RABBITSERVICEDEPENDENCYVALUE]" />
         </RegistryKey>
       </Component>
     </DirectoryRef>
@@ -111,9 +117,10 @@
               <File Id="RabbitMQ.Client.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\RabbitMQ.Client.dll" Checksum="yes" />
               
               <ServiceInstall Id ="HOLMSPBXConnectorService" Type="ownProcess" Name="HOLMSPBXConnectorService"
-                              DisplayName="HOLMS-PBXConnector-Service" Start="demand" Account="NT AUTHORITY\LocalService" ErrorControl="normal"
+                              DisplayName="HOLMS-PBXConnector-Service" Start="auto" Account="NT AUTHORITY\LocalService" ErrorControl="normal"
                               Interactive="no"
                               Description="HOLMS PBXConnector Server">
+                <util:ServiceConfig FirstFailureActionType="restart" SecondFailureActionType="restart" ThirdFailureActionType ="restart" RestartServiceDelayInSeconds ="10" />
               </ServiceInstall>
 
               <util:EventSource Name="PBXConnector" Log="HOLMS"
