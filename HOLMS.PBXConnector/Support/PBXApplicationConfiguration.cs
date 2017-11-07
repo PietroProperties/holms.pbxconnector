@@ -27,7 +27,8 @@ namespace HOLMS.PBXConnector.Support {
         }
 
         public IMessageConnectionFactory BuildMCF(ILogger logger) {
-            return new MessageConnectionFactory(logger, RabbitHost);
+            return new MessageConnectionFactory(logger,
+                new MessagingConfiguration($"amqp://{RabbitHost}:5672"));
         }
     }
 }

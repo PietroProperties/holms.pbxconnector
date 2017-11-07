@@ -3,4 +3,5 @@ bin/
 obj/
 .vs/
 TestResult.xml
+*.DotSettings.user
 

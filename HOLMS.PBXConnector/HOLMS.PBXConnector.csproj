@@ -64,9 +64,8 @@
     <Reference Include="Grpc.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
       <HintPath>..\packages\Grpc.Core.1.7.0\lib\net45\Grpc.Core.dll</HintPath>
     </Reference>
-    <Reference Include="HOLMS.Messaging, Version=12.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HOLMS.Messaging.1.0.12\lib\net452\HOLMS.Messaging.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="HOLMS.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HOLMS.Messaging.1.0.0.31\lib\net46\HOLMS.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="HOLMS.Platform, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HOLMS.Platform.1.1.0-v311\lib\netstandard2.0\HOLMS.Platform.dll</HintPath>

@@ -1,53 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition="'$(BUILD_NUMBER)' == ''">
-    <BuildNumber>0</BuildNumber>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BUILD_NUMBER)' != ''">
-    <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
-  </PropertyGroup>
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <FullVersion>2.0.0.$(BuildNumber)</FullVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProductVersion>3.10</ProductVersion>
-    <ProjectGuid>1275a298-9512-427a-8432-b3b707027201</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.9</ProductVersion>
+    <ProjectGuid>1f9fcd72-2ca9-4e4e-a3c0-951c747c0639</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>HOLMS.PBXConnector.ServiceRunner.Installer.$(FullVersion)</OutputName>
+    <OutputName>HOLMS.PBXConnector.ServiceRunner.Installer</OutputName>
     <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\WiX Toolset\v4\wix.targets</WixTargetsPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
   </ItemGroup>
-  <ItemGroup>
-    <WixExtension Include="WixUtilExtension">
-      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
-      <Name>WixUtilExtension</Name>
-    </WixExtension>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HOLMS.PBXConnector.ServiceRunner\HOLMS.PBXConnector.ServiceRunner.csproj">
-      <Name>HOLMS.PBXConnector.ServiceRunner</Name>
-      <Project>{dbb210d7-4008-4ecf-b95a-44f5f3fca8eb}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(WixTargetsPath)" />
+  <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
+    <Error Text="The WiX Toolset v4 build tools must be installed to build this project. To download the WiX Toolset v4, see http://wixtoolset.org/releases/" />
+  </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.

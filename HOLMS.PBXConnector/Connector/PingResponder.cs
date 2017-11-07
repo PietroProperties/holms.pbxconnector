@@ -24,7 +24,7 @@ namespace HOLMS.PBXConnector.Connector {
                 _cn = _cf.OpenConnection();
                 _ch = _cn.GetChannel();
 
-                _ml = _ch.CreateListenerForTopics(OnMessage,
+                _ml = _ch.BindPrivateQueue(OnMessage,
                     new[] {
                         PBXConnectorTopics.PbxPingRequest
                     });
