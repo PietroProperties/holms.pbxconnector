@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using HOLMS.Messaging;
-using HOLMS.Messaging.Topics;
 using HOLMS.Types.Extensions.Support;
 using HOLMS.Types.PBXConnector;
 using HOLMS.Application.Client;
 using HOLMS.PBXConnector.Support;
+using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
 
 namespace HOLMS.PBXConnector.Protocol.SMDR {

@@ -5,7 +5,8 @@ using Moq;
 using HOLMS.Types.PBXConnector;
 using System.Text;
 using System.Linq;
-using HOLMS.Application.Client;
+using HOLMS.Platform.Application.Client;
+using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
 
 namespace HOLMS.PBXConnector.Connector {
@@ -71,7 +72,7 @@ namespace HOLMS.PBXConnector.Connector {
             var publications = connections.SelectMany(c => c.GetChannels().SelectMany(ch => ch.Publications));
             Assert.AreEqual(1, publications.Count());
             var message = publications.First().Message as TCPRoomStatusMessage;
-            Assert.AreEqual(Messaging.Topics.PBXConnectorTopics.TcpRoomStatusTopic, publications.First().Routingkey);
+            Assert.AreEqual(PBXConnectorTopics.TcpRoomStatusTopic, publications.First().Routingkey);
             Assert.AreEqual(107.ToString(), message.TerminalIdentifier);
             Assert.AreEqual(2.ToString(), message.StatusCode);
         }

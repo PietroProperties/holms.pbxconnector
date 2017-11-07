@@ -14,17 +14,17 @@ namespace HOLMS.PBXConnector.Support {
         }
 
         [Test]
-        public async Task PBXConnectionStringOfShortLengthThrows() {
+        public void PBXConnectionStringOfShortLengthThrows() {
             Assert.Throws<ArgumentException>(() => RegistryConfigurationProvider.BuildConfiguration(_log, "8080"));
         }
 
         [Test]
-        public async Task PBXConnectionStringWithoutPBXPrefixThrows() {
+        public void PBXConnectionStringWithoutPBXPrefixThrows() {
             Assert.Throws<ArgumentException>(() => RegistryConfigurationProvider.BuildConfiguration(_log, "tcp:192.168.1.1:8080"));
         }
 
         [Test]
-        public async Task ValidTCPPBXConnectionStringCreatesConfiguration() {
+        public void ValidTCPPBXConnectionStringCreatesConfiguration() {
             var pbxConfig = RegistryConfigurationProvider.BuildConfiguration(_log, "pbx://tcp:192.168.1.1:8080");
             Assert.IsFalse(pbxConfig.SerialEnabled);
             Assert.IsTrue(pbxConfig.TCPEnabled);
@@ -34,12 +34,12 @@ namespace HOLMS.PBXConnector.Support {
         }
 
         [Test]
-        public async Task TCPPBXConnectionStringWithInvalidPortThrows() {
+        public void TCPPBXConnectionStringWithInvalidPortThrows() {
             Assert.Throws<ArgumentException>(() => RegistryConfigurationProvider.BuildConfiguration(_log, "pbx://tcp:192.168.1.1:80800"));
         }
 
         [Test]
-        public async Task ValidTCP_IPv6PBXConnectionStringCreatesConfiguration() {
+        public void ValidTCP_IPv6PBXConnectionStringCreatesConfiguration() {
             var pbxConfig = RegistryConfigurationProvider.BuildConfiguration(_log, "pbx://tcp:2001:0db8:85a3:0000:0000:8a2e:0370:7334:8080");
             Assert.IsFalse(pbxConfig.SerialEnabled);
             Assert.IsTrue(pbxConfig.TCPEnabled);
@@ -49,7 +49,7 @@ namespace HOLMS.PBXConnector.Support {
         }
 
         [Test]
-        public async Task ValidSerialPBXConnectionStringCreatesConfiguration() {
+        public void ValidSerialPBXConnectionStringCreatesConfiguration() {
             var pbxConfig = RegistryConfigurationProvider.BuildConfiguration(_log, "pbx://serial:COM1");
             Assert.IsTrue(pbxConfig.SerialEnabled);
             Assert.IsFalse(pbxConfig.TCPEnabled);
@@ -59,7 +59,7 @@ namespace HOLMS.PBXConnector.Support {
         }
 
         [Test]
-        public async Task ValidEmptyConnectionStringCreatesConfiguration() {
+        public void ValidEmptyConnectionStringCreatesConfiguration() {
             var pbxConfig = RegistryConfigurationProvider.BuildConfiguration(_log, "pbx://none");
             Assert.IsFalse(pbxConfig.SerialEnabled);
             Assert.IsFalse(pbxConfig.TCPEnabled);
