@@ -1,7 +1,7 @@
 ﻿using HOLMS.Messaging;
-using HOLMS.Messaging.Topics;
 using HOLMS.Types.PBXConnector;
 using System;
+using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
 
 namespace HOLMS.PBXConnector.Connector {

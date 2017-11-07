@@ -1,9 +1,9 @@
 ﻿using HOLMS.Application.Client;
 using HOLMS.Messaging;
-using HOLMS.Messaging.Topics;
 using HOLMS.PBXConnector.Support;
 using HOLMS.Types.PBXConnector;
 using System.Text.RegularExpressions;
+using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
 
 namespace HOLMS.PBXConnector.Protocol.PMS {

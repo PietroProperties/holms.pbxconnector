@@ -2,11 +2,11 @@
 using System.Linq;
 using HOLMS.Messaging;
 using HOLMS.Messaging.Tests;
-using HOLMS.Messaging.Topics;
 using HOLMS.Types.PBXConnector;
 using Moq;
 using NUnit.Framework;
 using HOLMS.PBXConnector.Support.Test;
+using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
 
 namespace HOLMS.PBXConnector.Protocol.SMDR {
