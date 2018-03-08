@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
   <Product Id="*" Name="HOLMS PBXConnector" Language="1033" Version="1.0.0.0" Manufacturer="shortbar" UpgradeCode="90dc6e59-ec70-4bf6-bf2f-0fd16f0538f7">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="HOLMSAppServer.cab" EmbedCab="yes" />
@@ -31,9 +31,6 @@
     <Property Id="PMSCONNECTIONSTRINGVALUE" Value="pbx://none">
       <RegistrySearch Id="PMSConnectionStringLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw" Name="PMSConnectionString" />
     </Property>
-    <Property Id="RABBITSERVICEDEPENDENCYVALUE" Value="RabbitMQ">
-      <RegistrySearch Id="RabbitServiceDependencyLookup" Root="HKLM" Key="SYSTEM\CurrentControlSet\Services\HOLMSPBXConnectorService" Type="raw" Name="DependOnService" />
-    </Property>
 
     <DirectoryRef Id="TARGETDIR">
       <Component Id="RegistrySettings" Guid="E9CE6A56-10F1-4A0F-9A49-8D3C3A8504EC" Permanent="yes">
@@ -45,9 +42,6 @@
           <RegistryValue Type="string" Name="SMDRConnectionString" Value="[SMDRCONNECTIONSTRINGVALUE]" />
           <RegistryValue Type="string" Name="PMSConnectionString" Value="[PMSCONNECTIONSTRINGVALUE]" />
         </RegistryKey>
-        <RegistryKey Root="HKLM" Key ="SYSTEM\CurrentControlSet\Services\HOLMSSchedulerService">
-          <RegistryValue Type="multiString" Name="DependOnService" Value="[RABBITSERVICEDEPENDENCYVALUE]" />
-        </RegistryKey>
       </Component>
     </DirectoryRef>
   </Fragment>
@@ -56,65 +50,52 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="HOLMS">
-          <Directory Id="ServiceDirectory" Name="PBXConnector">
-            <Component Id="PBXConnector" Guid="5772AD2E-21D4-49EE-BCD1-02CA3F123459">
+          <Directory Id="ServiceDirectory" Name="PBXConnector" FileSource="..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)">
+            <Component Id="PBXConnector" Guid="5772AD2E-21D4-49EE-BCD1-02CA3F123459" Win64="yes">
               <!-- PBXConnector -->
-              <File Id ="PBXConnectorInstaller" Name="HOLMS.PBXConnector.ServiceRunner.exe"
-                    Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)/HOLMS.PBXConnector.ServiceRunner.exe" KeyPath="yes" DiskId="1" />
+              <File Id ="PBXConnectorInstaller" Name="HOLMS.PBXConnector.ServiceRunner.exe" KeyPath="yes" DiskId="1" />
 
-              <File Id="BouncyCastle.Crypto.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\BouncyCastle.Crypto.dll" Checksum="yes" />
-              <File Id="Castle.Core.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Castle.Core.dll" Checksum="yes" />
-              <File Id="Google.Apis.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Google.Apis.dll" Checksum="yes" />
-              <File Id="Google.Apis.Auth.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Google.Apis.Auth.dll" Checksum="yes" />
-              <File Id="Google.Apis.Auth.PlatformServices.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Google.Apis.Auth.PlatformServices.dll" Checksum="yes" />
-              <File Id="Google.Apis.Core.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Google.Apis.Core.dll" Checksum="yes" />
-              <File Id="Google.Apis.PlatformServices.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Google.Apis.PlatformServices.dll" Checksum="yes" />
-              <File Id="Google.Protobuf.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Google.Protobuf.dll" Checksum="yes" />
-              <File Id="Grpc.Auth.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Grpc.Auth.dll" Checksum="yes" />
-              <File Id="Grpc.Core.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Grpc.Core.dll" Checksum="yes" />
-              <File Id="grpc_csharp_ext.x64.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\grpc_csharp_ext.x64.dll" Checksum="yes" />
-              <File Id="HOLMS.PBXConnector.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\HOLMS.PBXConnector.dll" Checksum="yes" />
-              <File Id="HOLMS.Platform.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\HOLMS.Platform.dll" Checksum="yes" />
-              <File Id="log4net.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\log4net.dll" Checksum="yes" />
-              <File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Microsoft.Extensions.DependencyInjection.Abstractions.dll" Checksum="yes" />
-              <File Id="Microsoft.Extensions.Logging.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Microsoft.Extensions.Logging.dll" Checksum="yes" />
-              <File Id="Microsoft.Extensions.Logging.Abstractions.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Microsoft.Extensions.Logging.Abstractions.dll" Checksum="yes" />
-              <File Id="Microsoft.Extensions.Logging.EventLog.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Microsoft.Extensions.Logging.EventLog.dll" Checksum="yes" />
-              <File Id="Microsoft.IdentityModel.Logging.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Microsoft.IdentityModel.Logging.dll" Checksum="yes" />
-              <File Id="Microsoft.IdentityModel.Tokens.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Microsoft.IdentityModel.Tokens.dll" Checksum="yes" />
-              <File Id="Microsoft.Win32.Primitives.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Microsoft.Win32.Primitives.dll" Checksum="yes" />
-              <File Id="Moq.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Moq.dll" Checksum="yes" />
-              <File Id="Newtonsoft.Json.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Newtonsoft.Json.dll" Checksum="yes" />
-              <File Id="NodaTime.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\NodaTime.dll" Checksum="yes" />
-              <File Id="System.AppContext.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.AppContext.dll" Checksum="yes" />
-              <File Id="System.Console.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Console.dll" Checksum="yes" />
-              <File Id="System.Diagnostics.DiagnosticSource.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Diagnostics.DiagnosticSource.dll" Checksum="yes" />
-              <File Id="System.Diagnostics.Tracing.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Diagnostics.Tracing.dll" Checksum="yes" />
-              <File Id="System.Globalization.Calendars.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Globalization.Calendars.dll" Checksum="yes" />
-              <File Id="System.IdentityModel.Tokens.Jwt.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.IdentityModel.Tokens.Jwt.dll" Checksum="yes" />
-              <File Id="System.Interactive.Async.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Interactive.Async.dll" Checksum="yes" />
-              <File Id="System.IO.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.IO.dll" Checksum="yes" />
-              <File Id="System.IO.Compression.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.IO.Compression.dll" Checksum="yes" />
-              <File Id="System.IO.Compression.ZipFile.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.IO.Compression.ZipFile.dll" Checksum="yes" />
-              <File Id="System.IO.FileSystem.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.IO.FileSystem.dll" Checksum="yes" />
-              <File Id="System.IO.FileSystem.Primitives.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.IO.FileSystem.Primitives.dll" Checksum="yes" />
-              <File Id="System.Net.Http.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Net.Http.dll" Checksum="yes" />
-              <File Id="System.Net.Sockets.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Net.Sockets.dll" Checksum="yes" />
-              <File Id="System.Reflection.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Reflection.dll" Checksum="yes" />
-              <File Id="System.Runtime.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Runtime.dll" Checksum="yes" />
-              <File Id="System.Runtime.Extensions.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Runtime.Extensions.dll" Checksum="yes" />
-              <File Id="System.Runtime.InteropServices.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Runtime.InteropServices.dll" Checksum="yes" />
-              <File Id="System.Runtime.InteropServices.RuntimeInformation.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Runtime.InteropServices.RuntimeInformation.dll" Checksum="yes" />
-              <File Id="System.Security.Cryptography.Algorithms.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Security.Cryptography.Algorithms.dll" Checksum="yes" />
-              <File Id="System.Security.Cryptography.Encoding.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Security.Cryptography.Encoding.dll" Checksum="yes" />
-              <File Id="System.Security.Cryptography.Primitives.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Security.Cryptography.Primitives.dll" Checksum="yes" />
-              <File Id="System.Security.Cryptography.X509Certificates.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\System.Security.Cryptography.X509Certificates.dll" Checksum="yes" />
-              <File Id="Zlib.Portable.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\Zlib.Portable.dll" Checksum="yes" />
-
-              <!-- HOLMS.PBXConnector dependencies -->
-              <File Id="HOLMS.Messaging.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\HOLMS.Messaging.dll" Checksum="yes" />
-              <File Id="nunit.framework.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\nunit.framework.dll" Checksum="yes" />
-              <File Id="RabbitMQ.Client.dll" Source="..\..\..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\RabbitMQ.Client.dll" Checksum="yes" />
+              <File Name="BouncyCastle.Crypto.dll"/>
+              <File Name="Castle.Core.dll" />
+              <File Name="Google.Apis.Auth.dll" />
+              <File Name="Google.Apis.Auth.PlatformServices.dll" />
+              <File Name="Google.Apis.Core.dll" />
+              <File Name="Google.Apis.dll" />
+              <File Name="Google.Apis.PlatformServices.dll" />
+              <File Name="Google.Protobuf.dll" />
+              <File Name="Grpc.Auth.dll" />
+              <File Name="Grpc.Core.dll" />
+              <File Name="grpc_csharp_ext.x64.dll" />
+              <File Name="HOLMS.Messaging.dll" />
+              <File Name="HOLMS.PBXConnector.dll" />
+              <File Name="HOLMS.Platform.dll" />
+              <File Name="log4net.dll" />
+              <File Name="Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+              <File Name="Microsoft.Extensions.Logging.Abstractions.dll" />
+              <File Name="Microsoft.Extensions.Logging.dll" />
+              <File Name="Microsoft.Extensions.Logging.EventLog.dll" />
+              <File Name="Microsoft.IdentityModel.Logging.dll" />
+              <File Name="Microsoft.IdentityModel.Tokens.dll" />
+              <File Name="Moq.dll" />
+              <File Name="Newtonsoft.Json.dll" />
+              <File Name="NodaTime.dll" />
+              <File Name="RabbitMQ.Client.dll" />
+              <File Name="System.Data.Common.dll" />
+              <File Name="System.Diagnostics.DiagnosticSource.dll" />
+              <File Name="System.Diagnostics.StackTrace.dll" />
+              <File Name="System.Diagnostics.Tracing.dll" />
+              <File Name="System.Globalization.Extensions.dll" />
+              <File Name="System.IdentityModel.Tokens.Jwt.dll" />
+              <File Name="System.Interactive.Async.dll"/>
+              <File Name="System.IO.Compression.dll" />
+              <File Name="System.Net.Http.dll"/>
+              <File Name="System.Net.Sockets.dll" />
+              <File Name="System.Runtime.Serialization.Primitives.dll" />
+              <File Name="System.Security.Cryptography.Algorithms.dll" />
+              <File Name="System.Security.SecureString.dll" />
+              <File Name="System.Threading.Overlapped.dll" />
+              <File Name="System.Xml.XPath.XDocument.dll" />
+              <File Name="Zlib.Portable.dll" />
 
               <ServiceInstall Id ="HOLMSPBXConnectorService" Type="ownProcess" Name="HOLMSPBXConnectorService"
                               DisplayName="HOLMS-PBXConnector-Service" Start="auto" Account="NT AUTHORITY\LocalService" ErrorControl="normal"
