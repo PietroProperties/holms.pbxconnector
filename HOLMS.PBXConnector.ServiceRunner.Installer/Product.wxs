@@ -80,9 +80,7 @@
               <File Name="Newtonsoft.Json.dll" />
               <File Name="NodaTime.dll" />
               <File Name="RabbitMQ.Client.dll" />
-              <File Name="System.Data.Common.dll" />
               <File Name="System.Diagnostics.DiagnosticSource.dll" />
-              <File Name="System.Diagnostics.StackTrace.dll" />
               <File Name="System.Diagnostics.Tracing.dll" />
               <File Name="System.Globalization.Extensions.dll" />
               <File Name="System.IdentityModel.Tokens.Jwt.dll" />
