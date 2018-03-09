@@ -9,8 +9,10 @@ using Microsoft.Extensions.Logging.EventLog;
 namespace HOLMS.PBXConnector.ServiceRunner {
     public partial class PBXConnectorService : ServiceBase {
         private readonly ILogger _log;
+
         private RegistryConfigurationProvider _config;
         private PBXConnection _connection;
+        private ApplicationClient _ac;
 
         public PBXConnectorService() {
             ServiceName = "HOLMS.PBXConnector.ServiceRunner";
@@ -28,15 +30,17 @@ namespace HOLMS.PBXConnector.ServiceRunner {
             }
             _log.LogInformation($"Completed Configuration Read");
 
-            var ac = new ApplicationClient(new PBXApplicationClientConfigurationProvider(_config), 
+            _ac = new ApplicationClient(new PBXApplicationClientConfigurationProvider(_config), 
                 _log, "CJASDBYCOKYIWBWNFPQHOBGIQPEJUBSYNEOUEKJZTOSWWCPGCRWNYGBOOUZE");
-            _connection = new PBXConnection(_log, _config, ac);
+            _connection = new PBXConnection(_log, _config, _ac);
             _log.LogInformation($"Initialized PBX Connection Object");
             _connection.Start();
         }
 
         protected override void OnStop() {
             _connection.Stop();
+            _ac?.Dispose();
+            _ac = null;
         }
 
         public static ILogger GetProductionLogger() {

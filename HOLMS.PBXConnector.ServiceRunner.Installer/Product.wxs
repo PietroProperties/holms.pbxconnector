@@ -14,16 +14,16 @@
 
   <Fragment>
     <Property Id="APPSVCIPPORTVALUE" Value="NotSet">
-      <RegistrySearch Id="AppSvcIpPortLookup" Root="HKLM" Key="SOFTWARE\HOLMS\Application" Type="raw" Name="AppSvcIPPort" />
+      <RegistrySearch Id="AppSvcIpPortLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw" Name="AppSvcIPPort" />
     </Property>
     <Property Id="RABBITHOSTVALUE" Value="127.0.0.1">
       <RegistrySearch Id="RabbitHostLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw"  Name="RabbitHost"/>
     </Property>
     <Property Id="SERVICEUSERNAMEVALUE" Value="NotSet">
-      <RegistrySearch Id="ServiceUsernameRegistryLookup" Root="HKLM" Key="SOFTWARE\HOLMS\SchedulerSvc" Type="raw" Name="ServiceUsername"/>
+      <RegistrySearch Id="ServiceUsernameRegistryLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw" Name="ServiceUsername"/>
     </Property>
     <Property Id="SERVICEPASSWORDVALUE" Value="NotSet">
-      <RegistrySearch Id="ServicePasswordRegistryLookup" Root="HKLM" Key="SOFTWARE\HOLMS\SchedulerSvc" Type="raw" Name="ServicePassword"/>
+      <RegistrySearch Id="ServicePasswordRegistryLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw" Name="ServicePassword"/>
     </Property>
     <Property Id="SMDRCONNECTIONSTRINGVALUE" Value="pbx://none">
       <RegistrySearch Id="SMDRConnectionStringLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw" Name="SMDRConnectionString" />
