@@ -50,12 +50,11 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="HOLMS">
-          <Directory Id="ServiceDirectory" Name="PBXConnector" FileSource="..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)">
+          <Directory Id="ServiceDirectory" Name="PBXConnector" FileSource="..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\net471">
             <Component Id="PBXConnector" Guid="5772AD2E-21D4-49EE-BCD1-02CA3F123459" Win64="yes">
               <!-- PBXConnector -->
               <File Id ="PBXConnectorInstaller" Name="HOLMS.PBXConnector.ServiceRunner.exe" KeyPath="yes" DiskId="1" />
 
-              <File Name="BouncyCastle.Crypto.dll"/>
               <File Name="Castle.Core.dll" />
               <File Name="Google.Apis.Auth.dll" />
               <File Name="Google.Apis.Auth.PlatformServices.dll" />
@@ -65,7 +64,6 @@
               <File Name="Google.Protobuf.dll" />
               <File Name="Grpc.Auth.dll" />
               <File Name="Grpc.Core.dll" />
-              <File Name="grpc_csharp_ext.x64.dll" />
               <File Name="HOLMS.Messaging.dll" />
               <File Name="HOLMS.PBXConnector.dll" />
               <File Name="HOLMS.Platform.dll" />
@@ -74,13 +72,17 @@
               <File Name="Microsoft.Extensions.Logging.Abstractions.dll" />
               <File Name="Microsoft.Extensions.Logging.dll" />
               <File Name="Microsoft.Extensions.Logging.EventLog.dll" />
+              <File Name="Microsoft.Extensions.Options.dll" />
+              <File Name="Microsoft.Extensions.Primitives.dll" />
               <File Name="Microsoft.IdentityModel.Logging.dll" />
               <File Name="Microsoft.IdentityModel.Tokens.dll" />
               <File Name="Moq.dll" />
               <File Name="Newtonsoft.Json.dll" />
               <File Name="NodaTime.dll" />
+              <File Name="nunit.framework.dll" />
               <File Name="RabbitMQ.Client.dll" />
-              <File Name="System.Diagnostics.DiagnosticSource.dll" />
+              <File Name="System.Data.Common.dll" />
+              <File Name="System.Diagnostics.StackTrace.dll" />
               <File Name="System.Diagnostics.Tracing.dll" />
               <File Name="System.Globalization.Extensions.dll" />
               <File Name="System.IdentityModel.Tokens.Jwt.dll" />
@@ -88,6 +90,7 @@
               <File Name="System.IO.Compression.dll" />
               <File Name="System.Net.Http.dll"/>
               <File Name="System.Net.Sockets.dll" />
+              <File Name="System.Runtime.CompilerServices.Unsafe.dll" />
               <File Name="System.Runtime.Serialization.Primitives.dll" />
               <File Name="System.Security.Cryptography.Algorithms.dll" />
               <File Name="System.Security.SecureString.dll" />
