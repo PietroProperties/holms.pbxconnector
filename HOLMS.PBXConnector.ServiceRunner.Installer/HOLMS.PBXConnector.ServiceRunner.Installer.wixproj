@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(BUILD_NUMBER)' == ''">
+    <BuildNumber>0</BuildNumber>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(BUILD_NUMBER)' != ''">
+    <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
+  </PropertyGroup>
   <PropertyGroup>
+    <FullVersion>1.0.0.$(BuildNumber)</FullVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.9</ProductVersion>
     <ProjectGuid>1f9fcd72-2ca9-4e4e-a3c0-951c747c0639</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>HOLMS.PBXConnector.ServiceRunner.Installer</OutputName>
+    <OutputName>HOLMS.PBXConnector.ServiceRunner.Installer.$(FullVersion)</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\WiX Toolset\v4\wix.targets</WixTargetsPath>
   </PropertyGroup>

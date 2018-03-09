@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-  <Product Id="*" Name="HOLMS PBXConnector" Language="1033" Version="1.0.0.0" Manufacturer="shortbar" UpgradeCode="90dc6e59-ec70-4bf6-bf2f-0fd16f0538f7">
+  <Product Id="*" Name="HOLMS PBXConnector" Language="1033" Version="!(bind.fileVersion.ServiceRunner)" Manufacturer="shortbar" UpgradeCode="90dc6e59-ec70-4bf6-bf2f-0fd16f0538f7">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     <Media Id="1" Cabinet="HOLMSAppServer.cab" EmbedCab="yes" />
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -53,7 +53,7 @@
           <Directory Id="ServiceDirectory" Name="PBXConnector" FileSource="..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\net471">
             <Component Id="PBXConnector" Guid="5772AD2E-21D4-49EE-BCD1-02CA3F123459" Win64="yes">
               <!-- PBXConnector -->
-              <File Id ="PBXConnectorInstaller" Name="HOLMS.PBXConnector.ServiceRunner.exe" KeyPath="yes" DiskId="1" />
+              <File Id="ServiceRunner" Name="HOLMS.PBXConnector.ServiceRunner.exe" KeyPath="yes" DiskId="1" />
               <File Name="HOLMS.PBXConnector.ServiceRunner.exe.config" />
 
               <File Name="Castle.Core.dll" />
