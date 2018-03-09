@@ -10,6 +10,7 @@
     <Exec Command="NCover.Reporting.exe bin\$(Configuration)\coverage.nccov //or SymbolModuleNamespaceClassMethod:Html //op bin\$(Configuration)" />
   </Target>
   <ItemGroup>
+    <PackageReference Include="Grpc.Core" Version="1.10.0" />
     <PackageReference Include="HOLMS.Messaging" Version="1.0.0.31" />
     <PackageReference Include="HOLMS.Platform" Version="1.2.0-v394" />
     <PackageReference Include="log4net" Version="2.0.8" />

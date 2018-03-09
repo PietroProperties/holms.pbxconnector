@@ -54,6 +54,7 @@
             <Component Id="PBXConnector" Guid="5772AD2E-21D4-49EE-BCD1-02CA3F123459" Win64="yes">
               <!-- PBXConnector -->
               <File Id ="PBXConnectorInstaller" Name="HOLMS.PBXConnector.ServiceRunner.exe" KeyPath="yes" DiskId="1" />
+              <File Name="HOLMS.PBXConnector.ServiceRunner.exe.config" />
 
               <File Name="Castle.Core.dll" />
               <File Name="Google.Apis.Auth.dll" />
@@ -63,6 +64,7 @@
               <File Name="Google.Apis.PlatformServices.dll" />
               <File Name="Google.Protobuf.dll" />
               <File Name="Grpc.Auth.dll" />
+              <File Name="grpc_csharp_ext.x64.dll" />
               <File Name="Grpc.Core.dll" />
               <File Name="HOLMS.Messaging.dll" />
               <File Name="HOLMS.PBXConnector.dll" />
