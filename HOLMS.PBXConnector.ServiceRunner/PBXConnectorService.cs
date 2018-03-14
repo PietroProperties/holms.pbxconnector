@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.ServiceProcess;
 using HOLMS.PBXConnector.Support;
 using HOLMS.PBXConnector.Connector;
@@ -20,7 +21,9 @@ namespace HOLMS.PBXConnector.ServiceRunner {
         }
 
         protected override void OnStart(string[] args) {
-            _log.LogInformation("Starting PBXConnector service");
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            _log.LogInformation($"Starting PBXConnector service {fvi.FileVersion}");
 
             try {
                 _config = new RegistryConfigurationProvider(_log);

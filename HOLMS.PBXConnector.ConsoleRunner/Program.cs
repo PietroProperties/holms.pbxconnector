@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using HOLMS.PBXConnector.Support;
 using HOLMS.PBXConnector.Connector;
 using HOLMS.Application.Client;
@@ -12,7 +13,9 @@ namespace HOLMS.PBXConnector.ConsoleRunner {
     class Program {
         static void Main(string[] args) {
             var log = GetProductionLogger();
-            log.LogInformation("Starting PBXConnector Console Runner");
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            log.LogInformation($"Starting PBXConnector Console Runner {fvi.FileVersion}");
 
             RegistryConfigurationProvider config;
             try {
