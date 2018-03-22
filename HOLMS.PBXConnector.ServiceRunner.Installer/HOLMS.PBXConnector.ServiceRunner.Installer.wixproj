@@ -7,7 +7,7 @@
     <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
   </PropertyGroup>
   <PropertyGroup>
-    <FullVersion>1.0.0.$(BuildNumber)</FullVersion>
+    <FullVersion>1.0.$(BuildNumber).0</FullVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.9</ProductVersion>
