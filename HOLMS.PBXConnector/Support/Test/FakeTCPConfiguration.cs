@@ -1,7 +1,7 @@
 ﻿using HOLMS.Messaging;
 using HOLMS.Messaging.Tests;
 using System;
-using HOLMS.Application.Client;
+using HOLMS.Platform.Client;
 using Microsoft.Extensions.Logging;
 
 namespace HOLMS.PBXConnector.Support.Test {

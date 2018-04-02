@@ -1,5 +1,5 @@
-﻿using HOLMS.Application.Client;
-using HOLMS.Messaging;
+﻿using HOLMS.Messaging;
+using HOLMS.Platform.Client;
 using Microsoft.Extensions.Logging;
 
 namespace HOLMS.PBXConnector.Support {

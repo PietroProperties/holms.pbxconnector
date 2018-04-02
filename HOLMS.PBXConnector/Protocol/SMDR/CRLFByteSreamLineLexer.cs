@@ -7,9 +7,6 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
     /// of a complete line (drops CR/LF delimiters) and Error on error.
     /// </summary>
     public class CRLFByteSreamLineLexer : ByteStreamLexer {
-        
-        public CRLFByteSreamLineLexer() : base() { }
-
         public override void Lex(byte b) {
             // Implement a simple lexer which splits the incoming text into lines
             // Based on observation, the mitel system writes 0x0d 0x0a between lines

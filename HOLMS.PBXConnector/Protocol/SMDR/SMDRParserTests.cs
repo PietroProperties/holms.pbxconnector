@@ -6,13 +6,15 @@ using HOLMS.Types.PBXConnector;
 using Moq;
 using NUnit.Framework;
 using HOLMS.PBXConnector.Support.Test;
+using HOLMS.Platform.Support.Time;
 using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 
 namespace HOLMS.PBXConnector.Protocol.SMDR {
     class SMDRParserTestShim : SMDRParser {
-        public SMDRParserTestShim(FakeTCPConfiguration config, ILogger log, IMessageConnectionFactory cf)
-            : base(config.PMSConnection, log, cf, new FakeApplicationClient(config, log, "fake client id")) {
+        public SMDRParserTestShim(FakeTCPConfiguration config, ILogger log, IMessageConnectionFactory cf, IClock c)
+            : base(config.PMSConnection, log, cf, new FakeApplicationClient(config, log, "fake client id"), c) {
             StartRabbitMQ();
         }
 
@@ -22,10 +24,14 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
     }
 
     class SMDRParserTests {
-        private SMDRParserTestShim _mp;
         private FakeRabbitConnectionFactory _fcf;
         private Mock<ILogger> _logMock;
+        private FakeClock _c;
+        private SMDRParserTestShim _mp;
+        private DateTime _localNow;
+
         const string ChuckCallingToMobilePhoneFromHotel =  " 08/02 14:12  00:00:24 402   9   14155596887                 T074               ";
+        const string ChuckSignalingStatusAtColumbus =      " 03/30  3:06P 00:00:04 102   9   601                         T092               ";
         const string SyntheticCallFromCOTrunk =            " 08/02 14:12  00:00:24 T402  9   601                         T074               ";
         const string SyntheticCallFromNonCOTrunk =         " 08/02 14:13  00:00:06 X101  9   601                         T086               ";
         const string DisregardedRoomStatusMessage =        "127   08/03 10:28  RS CLEAN                     ";
@@ -34,7 +40,11 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
         public void Init() {
             _fcf = new FakeRabbitConnectionFactory();
             _logMock = new Mock<ILogger>();
-            _mp = new SMDRParserTestShim(new FakeTCPConfiguration(), _logMock.Object, _fcf);
+            _c = new FakeClock();
+            _mp = new SMDRParserTestShim(new FakeTCPConfiguration(), _logMock.Object, _fcf, _c);
+            var now = DateTime.Now;
+            _localNow = now.ToLocalTime();
+            _c.StopAt(Instant.FromDateTimeUtc(now.ToUniversalTime()));
         }
 
         private RecordedPublication AssertOnePublicationAndRetrieve() {
@@ -62,8 +72,7 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
             
             // We transmit this thing in UTC but it's specified in local time
             var start = mc.StartTime.ToDateTime().ToLocalTime();
-            var now = DateTime.Now;
-            Assert.AreEqual(now.Year, start.Year);
+            Assert.AreEqual(_localNow.Year, start.Year);
             Assert.AreEqual(8, start.Month);
             Assert.AreEqual(2, start.Day);
             Assert.AreEqual(14, start.Hour);
@@ -130,36 +139,42 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
             Assert.AreEqual("601", c2.MainDigitsDialed);
         }
 
-        /*
         [Test]
-        public void RoomStatusMessageLogsDebugMessageAndDoesNotPublish() {
-            string loggedDebugMsg = null;
+        public void StatusSignalingFromColumbusParsedWith12HourTime() {
+            _mp.InjectLine(ChuckSignalingStatusAtColumbus);
+            var pub = AssertOnePublicationAndRetrieve();
+            var mc = ((PhoneCallEnded)pub.Message).MitelCallEnded;
 
-            _logMock.Setup(x => x.LogDebug(It.IsAny<string>()))
-                .Callback((string m) => { loggedDebugMsg = m; });
+            // We transmit this thing in UTC but it's specified in local time
+            var start = mc.StartTime.ToDateTime().ToLocalTime();
+            Assert.AreEqual(_localNow.Year, start.Year);
+            Assert.AreEqual(3, start.Month);
+            Assert.AreEqual(30, start.Day);
+            Assert.AreEqual(15, start.Hour);
+            Assert.AreEqual(6, start.Minute);
+            Assert.AreEqual(0, start.Second);
 
+            var length = mc.Duration.ToTimeSpan();
+            Assert.AreEqual(0, length.Days);
+            Assert.AreEqual(0, length.Hours);
+            Assert.AreEqual(0, length.Minutes);
+            Assert.AreEqual(4, length.Seconds);
+        }
+
+        [Test]
+        public void RoomStatusMessageDoesNotPublish() {
             _mp.InjectLine(DisregardedRoomStatusMessage);
 
             var ch = _fcf.Connections.First().GetChannel(0);
             Assert.AreEqual(0, ch.Publications.Count);
-
-            StringAssert.Contains("Disregarding room status message", loggedDebugMsg);
         }
 
         [Test]
-        public void GarbageInputLoggedAtWarnLevelWithoutPublication() {
-            string loggedWarnMsg = null;
-
-            _logMock.Setup(x => x.LogWarning(It.IsAny<string>()))
-                .Callback((string m) => { loggedWarnMsg = m; });
-
+        public void GarbageInputIgnoredWithoutPublication() {
             _mp.InjectLine("garbage");
 
             var ch = _fcf.Connections.First().GetChannel(0);
             Assert.AreEqual(0, ch.Publications.Count);
-
-            StringAssert.Contains("Ignoring unrecognized input line", loggedWarnMsg);
         }
-        */
     }
 }

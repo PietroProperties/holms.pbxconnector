@@ -1,20 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
+
+  <Target Name="ForceGenerationOfBindingRedirects"
+    AfterTargets="ResolveAssemblyReferences"
+    BeforeTargets="GenerateBindingRedirects"
+    Condition="'$(AutoGenerateBindingRedirects)' == 'true'">
+    <PropertyGroup>
+      <!-- Needs to be set in a target because it has to be set after the initial evaluation in the common targets -->
+      <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    </PropertyGroup>
+  </Target>
+
   <Target Name="RunTests" DependsOnTargets="Build">
-    <Exec Command="NCover.Console.exe nunit3-console bin\$(Configuration)\HOLMS.PBXConnector.dll //ias HOLMS.PBXConnector.ServiceRunner.* //x bin\$(Configuration)\coverage.nccov /labels:All" />
+    <Exec Command="NCover.Console.exe nunit3-console bin\$(Configuration)\net471\HOLMS.PBXConnector.dll //ias HOLMS.PBXConnector.ServiceRunner.* //x bin\$(Configuration)\coverage.nccov /labels:All" />
     <Exec Command="NCover.Reporting.exe bin\$(Configuration)\coverage.nccov //or SymbolModuleNamespaceClassMethod:Html //op bin\$(Configuration)" />
   </Target>
   <ItemGroup>
     <PackageReference Include="Grpc.Core" Version="1.10.0" />
     <PackageReference Include="HOLMS.Messaging" Version="1.0.0.31" />
-    <PackageReference Include="HOLMS.Platform" Version="1.2.0-v394" />
+    <PackageReference Include="HOLMS.Platform" Version="1.2.0-v413" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="NUnit" Version="3.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>
 

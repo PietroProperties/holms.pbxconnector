@@ -3,13 +3,15 @@ using System.Diagnostics;
 using System.ServiceProcess;
 using HOLMS.PBXConnector.Support;
 using HOLMS.PBXConnector.Connector;
-using HOLMS.Application.Client;
+using HOLMS.Platform.Client;
+using HOLMS.Platform.Support.Time;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
 
 namespace HOLMS.PBXConnector.ServiceRunner {
     public partial class PBXConnectorService : ServiceBase {
         private readonly ILogger _log;
+        private readonly RealClock _c = new RealClock();
 
         private RegistryConfigurationProvider _config;
         private PBXConnection _connection;
@@ -35,8 +37,8 @@ namespace HOLMS.PBXConnector.ServiceRunner {
 
             _ac = new ApplicationClient(new PBXApplicationClientConfigurationProvider(_config), 
                 _log, "CJASDBYCOKYIWBWNFPQHOBGIQPEJUBSYNEOUEKJZTOSWWCPGCRWNYGBOOUZE");
-            _connection = new PBXConnection(_log, _config, _ac);
-            _log.LogInformation($"Initialized PBX Connection Object");
+            _connection = new PBXConnection(_log, _config, _ac, _c);
+            _log.LogInformation("Initialized PBX Connection Object");
             _connection.Start();
         }
 

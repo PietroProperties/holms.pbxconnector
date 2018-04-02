@@ -2,10 +2,11 @@
 using System.Threading;
 using System;
 using HOLMS.Types.IAM.RPC;
-using HOLMS.Application.Client;
 using HOLMS.PBXConnector.Protocol.SMDR;
 using HOLMS.PBXConnector.Protocol.PMS;
+using HOLMS.Platform.Client;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 
 namespace HOLMS.PBXConnector.Connector {
     public class PBXConnection {
@@ -13,6 +14,7 @@ namespace HOLMS.PBXConnector.Connector {
         private readonly ILogger _log;
         private readonly IRegistryConfigurationProvider _config;
         private readonly IApplicationClient _ac;
+        private readonly IClock _c;
 
         // This responds to "are you alive" messages from the application server delivered via
         // RabbitMQ. It is always enabled (no configuration possible to disable it) and runs
@@ -30,10 +32,11 @@ namespace HOLMS.PBXConnector.Connector {
         private PMSParser _pmsParser;
         private Thread _pmsParserThread;
         
-        public PBXConnection(ILogger log, IRegistryConfigurationProvider config, IApplicationClient ac) {
+        public PBXConnection(ILogger log, IRegistryConfigurationProvider config, IApplicationClient ac, IClock c) {
             _log = log;
             _config = config;
             _ac = ac;
+            _c = c;
         }
 
         public void Start() {
@@ -49,7 +52,7 @@ namespace HOLMS.PBXConnector.Connector {
 
             if (_config.SMDRConnection.SerialEnabled || _config.SMDRConnection.TCPEnabled) {
                 _log.LogInformation("Starting SMDR Listener");
-                _smdrParser = new SMDRParser(_config.SMDRConnection, _log, mcf, _ac);
+                _smdrParser = new SMDRParser(_config.SMDRConnection, _log, mcf, _ac, _c);
                 _smdrParserThread = new Thread(_smdrParser.Start);
                 _smdrParserThread.Start();
             } else {
@@ -58,7 +61,7 @@ namespace HOLMS.PBXConnector.Connector {
 
             if (_config.PMSConnection.TCPEnabled || _config.PMSConnection.SerialEnabled) {
                 _log.LogInformation($"Starting PMS Listener");
-                _pmsParser = new PMSParser(_config.PMSConnection, _log, mcf, _ac);
+                _pmsParser = new PMSParser(_config.PMSConnection, _log, mcf, _ac, _c);
                 _pmsParserThread = new Thread(_pmsParser.Start);
                 _pmsParserThread.Start();
             } else {

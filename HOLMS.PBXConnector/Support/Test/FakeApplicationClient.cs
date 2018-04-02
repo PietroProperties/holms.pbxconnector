@@ -1,4 +1,4 @@
-﻿using HOLMS.Application.Client;
+﻿using HOLMS.Platform.Client;
 using HOLMS.Types.Primitive;
 using Microsoft.Extensions.Logging;
 

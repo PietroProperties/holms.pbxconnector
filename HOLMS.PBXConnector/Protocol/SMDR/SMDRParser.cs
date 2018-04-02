@@ -1,21 +1,22 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using HOLMS.Messaging;
-using HOLMS.Types.Extensions.Support;
 using HOLMS.Types.PBXConnector;
-using HOLMS.Application.Client;
 using HOLMS.PBXConnector.Support;
+using HOLMS.Platform.Client;
+using HOLMS.Platform.Support.Conversions;
 using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 
 namespace HOLMS.PBXConnector.Protocol.SMDR {
     internal class SMDRParser : PBXParser {
-        private readonly Regex _dialedCallReport = new Regex(@"^.(\d{2})/(\d{2}) (\d{2}):(\d{2})(.) (\d{2}):(\d{2}):(\d{2}) (.{4}) .([0-9*# ]{4})([0-9*# ]{26})..(.{4})\s{15}$");
+        private readonly Regex _dialedCallReport = new Regex(@"^.(\d{2})/(\d{2}) ([ \d]{2}):(\d{2})(.) (\d{2}):(\d{2}):(\d{2}) (.{4}) .([0-9*# ]{4})([0-9*# ]{26})..(.{4})\s{15}$");
         private readonly Regex _roomStatusRegex = new Regex(@"^.{19}RS .{26}$");
         protected override string ProtocolName => "MitelSMDRParser";
 
-        public SMDRParser(PBXConfiguration config, ILogger log, IMessageConnectionFactory cf, IApplicationClient ac) :
-            base(config, log, cf, ac) {
+        public SMDRParser(PBXConfiguration config, ILogger log, IMessageConnectionFactory cf,
+                IApplicationClient ac, IClock c) :
+            base(config, log, cf, ac, c) {
             RegisterLexer(new CRLFByteSreamLineLexer());
         }
 
@@ -24,7 +25,7 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
             // Provided as a test hook -- tests inject input here
             var dialedCallMatch = _dialedCallReport.Match(line);
             if (dialedCallMatch.Success) {
-                var dc = new DialedCallReport(dialedCallMatch, line);
+                var dc = new DialedCallReport(C, dialedCallMatch, line);
                 ParseAndPublishDialedCall(dc);
                 return;
             }
@@ -43,7 +44,7 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
 
             var msg = new PhoneCallEnded {
                 JWToken = AC.SC.AccessToken,
-                MsgReceivedAt = DateTime.Now.ToTS(),
+                MsgReceivedAt = C.GetCurrentInstant().ToTS(),
                 RawMsg = rp.RawLine,
                 MitelCallEnded = call,
             };

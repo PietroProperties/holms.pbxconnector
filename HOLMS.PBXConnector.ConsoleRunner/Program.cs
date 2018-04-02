@@ -2,7 +2,8 @@
 using System.Diagnostics;
 using HOLMS.PBXConnector.Support;
 using HOLMS.PBXConnector.Connector;
-using HOLMS.Application.Client;
+using HOLMS.Platform.Client;
+using HOLMS.Platform.Support.Time;
 using Microsoft.Extensions.Logging;
 
 /**
@@ -15,6 +16,7 @@ namespace HOLMS.PBXConnector.ConsoleRunner {
             var log = GetProductionLogger();
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            var c = new RealClock();
             log.LogInformation($"Starting PBXConnector Console Runner {fvi.FileVersion}");
 
             RegistryConfigurationProvider config;
@@ -28,7 +30,7 @@ namespace HOLMS.PBXConnector.ConsoleRunner {
             var ac = new ApplicationClient(
                 new PBXApplicationClientConfigurationProvider(config),
                 log, "CJASDBYCOKYIWBWNFPQHOBGIQPEJUBSYNEOUEKJZTOSWWCPGCRWNYGBOOUZE");
-            var connector = new PBXConnection(log, config, ac);
+            var connector = new PBXConnection(log, config, ac, c);
             connector.Start();
         }
 

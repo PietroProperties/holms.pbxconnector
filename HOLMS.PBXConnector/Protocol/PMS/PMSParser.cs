@@ -1,10 +1,11 @@
-﻿using HOLMS.Application.Client;
-using HOLMS.Messaging;
+﻿using HOLMS.Messaging;
 using HOLMS.PBXConnector.Support;
 using HOLMS.Types.PBXConnector;
 using System.Text.RegularExpressions;
+using HOLMS.Platform.Client;
 using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 
 namespace HOLMS.PBXConnector.Protocol.PMS {
     /// <summary>
@@ -23,8 +24,9 @@ namespace HOLMS.PBXConnector.Protocol.PMS {
         protected const string ReceivedMessageStringFormat = "Recieved room status message code: {0}, terminal number: {1}";
 
 
-        public PMSParser(PBXConfiguration config, ILogger log, IMessageConnectionFactory cf, IApplicationClient ac) :
-            base(config, log, cf, ac) {
+        public PMSParser(PBXConfiguration config, ILogger log, IMessageConnectionFactory cf,
+                IApplicationClient ac, IClock c) :
+            base(config, log, cf, ac, c) {
             var lexer = new PMSByteStreamLexer();
             lexer.EnquireRecieved += EnquireReceived;
             RegisterLexer(lexer);

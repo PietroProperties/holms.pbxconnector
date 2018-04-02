@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using HOLMS.Types.Extensions.Support;
 using HOLMS.Types.PBXConnector;
 using Google.Protobuf.WellKnownTypes;
+using HOLMS.Platform.Support.Conversions;
+using NodaTime;
 
 namespace HOLMS.PBXConnector.Protocol.SMDR {
     public class DialedCallReport {
         private readonly Match _m;
+        private readonly IClock _c;
         public string RawLine { get; protected set; }
 
-        public DialedCallReport(Match m, string line) {
+        public DialedCallReport(IClock c, Match m, string line) {
+            _c = c;
             _m = m;
             RawLine = line;
         }
@@ -34,7 +37,7 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
             };
         }
 
-        private DateTime GetStartDateFromSMDR(string month, string day,
+        private Instant GetStartDateFromSMDR(string month, string day,
             string hour, string minute, string pmDesignator) {
             //12 or 24-hour clock. If 12-hour, pm indicated by "p" after time
             var hourInt = Convert.ToInt32(hour) + (pmDesignator.ToLower() == "p" ? 12 : 0);
@@ -43,8 +46,10 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
             var monthInt = Convert.ToInt32(month);
             var dayInt = Convert.ToInt32(day);
 
-            var now = DateTime.Now;
-            return new DateTime(now.Year, monthInt, dayInt, hourInt, minuteInt, 0, DateTimeKind.Local);
+            var localNow = _c.GetCurrentInstant().ToDateTimeUtc().ToLocalTime();
+            var localCallStart = new DateTime(localNow.Year, monthInt, dayInt, hourInt, minuteInt, 0,
+                DateTimeKind.Local).ToUniversalTime();
+            return Instant.FromDateTimeUtc(localCallStart.ToUniversalTime());
         }
 
         private MitelPhoneCircuit DecodeCircuitDescriptor(string caller) {

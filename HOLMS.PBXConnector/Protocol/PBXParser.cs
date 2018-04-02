@@ -1,17 +1,19 @@
-﻿using HOLMS.Application.Client;
-using HOLMS.Messaging;
+﻿using HOLMS.Messaging;
 using HOLMS.PBXConnector.Support;
 using HOLMS.PBXConnector.Transport;
 using HOLMS.PBXConnector.Transport.Serial;
 using HOLMS.PBXConnector.Transport.TCP;
 using System;
+using HOLMS.Platform.Client;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 
 namespace HOLMS.PBXConnector.Protocol {
     internal abstract class PBXParser {
         protected readonly ILogger Log;
         protected readonly IMessageConnectionFactory CF;
         protected readonly IApplicationClient AC;
+        protected readonly IClock C;
         protected ITransport Transport;
         protected ByteStreamLexer Lexer;
         protected IMessageConnection CN;
@@ -20,10 +22,12 @@ namespace HOLMS.PBXConnector.Protocol {
         protected abstract string ProtocolName { get; }
         protected abstract void ParseLine(object sender, string line);
 
-        protected PBXParser(PBXConfiguration config, ILogger log, IMessageConnectionFactory cf, IApplicationClient ac) {
+        protected PBXParser(PBXConfiguration config, ILogger log, IMessageConnectionFactory cf,
+                IApplicationClient ac, IClock c) {
             Log = log;
             CF = cf;
             AC = ac;
+            C = c;
             Transport = GetConfiguredTransport(log, config);
             Transport.DataArrived += TransportDataArrived;
         }

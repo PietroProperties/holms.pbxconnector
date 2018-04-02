@@ -5,7 +5,8 @@ using Moq;
 using HOLMS.Types.PBXConnector;
 using System.Text;
 using System.Linq;
-using HOLMS.Platform.Application.Client;
+using HOLMS.Platform.Client;
+using HOLMS.Platform.Support.Time;
 using HOLMS.Platform.Types.Topics;
 using Microsoft.Extensions.Logging;
 
@@ -24,8 +25,7 @@ namespace HOLMS.PBXConnector.Connector {
 
             _server = new TestTCPServer(_log.Object, _lc.PMSConnection.TCPPort);
             _connector = new PBXConnection(_log.Object, _lc,
-                new MockApplicationClient(new Mock<ILogger>().Object));
-
+                new MockApplicationClient(new Mock<ILogger>().Object), new RealClock());
         }
 
         [TearDown]

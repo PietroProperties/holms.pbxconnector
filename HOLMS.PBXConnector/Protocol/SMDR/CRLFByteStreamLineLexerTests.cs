@@ -108,7 +108,6 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
             Assert.AreEqual(1, _errorCount);
             Assert.AreEqual(2, _lines.Count);
             Assert.AreEqual("line", _lines.Last());
-
         }
     }
 }
