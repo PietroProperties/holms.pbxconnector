@@ -38,11 +38,29 @@ namespace HOLMS.PBXConnector.Transport.Serial {
 
             var port = new SerialPort(portName) {
                 // "1200-8-N-1"
-                BaudRate = 1200,
-                DataBits = 8,
-                Handshake = Handshake.None, // no flow control
-                StopBits = StopBits.One
+                //BaudRate = 1200,
+                //DataBits = 8,
+                //Handshake = Handshake.None, // no flow control
+                //StopBits = StopBits.One
             };
+
+            try
+            {
+                port.BaudRate = Convert.ToInt32(NativeMethods.GetStringRegistryEntry("BaudRate"));
+                port.DataBits = Convert.ToInt32(NativeMethods.GetStringRegistryEntry("DataBits"));
+                port.Handshake = (Handshake)Enum.Parse(typeof(Handshake), NativeMethods.GetStringRegistryEntry("Handshake"));
+                port.Parity = (Parity)Enum.Parse(typeof(Parity), NativeMethods.GetStringRegistryEntry("Parity"));
+                port.StopBits = (StopBits)Enum.Parse(typeof(StopBits), NativeMethods.GetStringRegistryEntry("StopBits"));
+            }
+            catch
+            {
+                log.LogWarning($"Registry entry not found for serial port");
+                port.BaudRate = 1200;
+                port.DataBits = 8;
+                port.StopBits = StopBits.One;
+                port.Handshake = Handshake.None;
+                port.Parity = Parity.None;
+            }
 
             return port;
         }
