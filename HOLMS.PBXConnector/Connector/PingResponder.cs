@@ -40,14 +40,23 @@ namespace HOLMS.PBXConnector.Connector {
         public void Stop() {
             _log.LogInformation("PingResponder: received stop signal, cleaning up...");
 
-            _ml.Stop();
-            _ml = null;
+            if (_ml != null)
+            {
+                _ml.Stop();
+                _ml = null;
+            }
 
-            _ch.Close();
-            _ch = null;
+            if (_ch != null)
+            {
+                _ch.Close();
+                _ch = null;
+            }
 
-            _cn.Close();
-            _cn = null;
+            if (_cn != null)
+            {
+                _cn.Close();
+                _cn = null;
+            }
         }
 
 
