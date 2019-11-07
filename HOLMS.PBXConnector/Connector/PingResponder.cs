@@ -41,21 +41,18 @@ namespace HOLMS.PBXConnector.Connector {
             _log.LogInformation("PingResponder: received stop signal, cleaning up...");
 
             if (_ml != null)
-                _ml = null;
             {
                 _ml.Stop();
                 _ml = null;
             }
 
             if (_ch != null)
-                _ch = null;
             {
                 _ch.Close();
                 _ch = null;
             }
 
             if (_cn != null)
-                _cn = null;
             {
                 _cn.Close();
                 _cn = null;
