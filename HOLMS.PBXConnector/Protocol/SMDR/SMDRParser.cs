@@ -10,7 +10,7 @@ using NodaTime;
 
 namespace HOLMS.PBXConnector.Protocol.SMDR {
     internal class SMDRParser : PBXParser {
-        private readonly Regex _dialedCallReport = new Regex(@"^.(\d{2})/(\d{2}) ([ \d]{2}):(\d{2})(.) (\d{2}):(\d{2}):(\d{2}) (.{4}) .([0-9*# ]{4})([0-9*# ]{26})..(.{4})");
+        private readonly Regex _dialedCallReport = new Regex(@"^(\d{2})/(\d{2}) ([ \d]{2}):(\d{2})(.) (\d{2}):(\d{2}):(\d{2}) (.{4}) .([0-9*# ]{4})([0-9*# ]{26})..(.{4})$");
         private readonly Regex _roomStatusRegex = new Regex(@"^.{19}RS .{26}$");
         protected override string ProtocolName => "MitelSMDRParser";
 
