@@ -65,7 +65,7 @@ namespace HOLMS.PBXConnector.Transport.TCP {
                     while (_client.Connected) {
                         int bytesRec = _client.Receive(bytes);
                         DataArrived?.Invoke(this, new TransportDataEventArgs(bytes, bytesRec));
-                        _log.LogDebug($"Received message: {Encoding.ASCII.GetString(bytes, 0, bytesRec)}");
+                        //_log.LogDebug($"Received message: {Encoding.ASCII.GetString(bytes, 0, bytesRec)}");
                     }
                 }
                 catch (SocketException ex) {

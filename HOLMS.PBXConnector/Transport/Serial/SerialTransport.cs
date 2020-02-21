@@ -61,7 +61,7 @@ namespace HOLMS.PBXConnector.Transport.Serial {
                     var bytesRead = _sp.Read(rawRxBuf, 0, rawRxBuf.Length);
                     if (bytesRead > 0) {
                         DataArrived?.Invoke(this, new TransportDataEventArgs(rawRxBuf, bytesRead));
-                        _log.LogDebug($"Received message: {Encoding.ASCII.GetString(rawRxBuf, 0, bytesRead)}");
+                        //_log.LogDebug($"Received message: {Encoding.ASCII.GetString(rawRxBuf, 0, bytesRead)}");
                     }
                 }
                 catch (IOException) {
