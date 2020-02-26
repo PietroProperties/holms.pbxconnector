@@ -23,7 +23,7 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
         protected override void ParseLine(object sender, string line) {
             Log.LogDebug($"{ProtocolName}: Received full line from lexer: {line}");
             // Provided as a test hook -- tests inject input here
-            var dialedCallMatch = _dialedCallReport.Match(line);
+            var dialedCallMatch = _dialedCallReport.Match(line?.Trim());
             if (dialedCallMatch.Success) {
                 var dc = new DialedCallReport(C, dialedCallMatch, line);
                 ParseAndPublishDialedCall(dc);
