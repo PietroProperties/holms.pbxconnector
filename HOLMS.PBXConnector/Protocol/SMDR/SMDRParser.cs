@@ -10,7 +10,7 @@ using NodaTime;
 
 namespace HOLMS.PBXConnector.Protocol.SMDR {
     internal class SMDRParser : PBXParser {
-        private readonly Regex _dialedCallReport = new Regex(@"^.(\d{2})/(\d{2}) ([ \d]{2}):(\d{2})(.) (\d{2}):(\d{2}):(\d{2}) (.{4}) .([0-9*# ]{4})([0-9*# ]{26})..(.{4})\s{15}$");
+        private readonly Regex _dialedCallReport = new Regex(@"^.(\d{2})/(\d{2}) ([ \d]{2}):(\d{2})(.) (\d{2}):(\d{2}):(\d{2}) (.{4}) .([0-9*# ]{4})([0-9*# ]{26})..(.{4})");
         private readonly Regex _roomStatusRegex = new Regex(@"^.{19}RS .{26}$");
         protected override string ProtocolName => "MitelSMDRParser";
 
@@ -23,7 +23,7 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
         protected override void ParseLine(object sender, string line) {
             Log.LogDebug($"{ProtocolName}: Received full line from lexer: {line}");
             // Provided as a test hook -- tests inject input here
-            var dialedCallMatch = _dialedCallReport.Match(line);
+            var dialedCallMatch = _dialedCallReport.Match(line?.Trim());
             if (dialedCallMatch.Success) {
                 var dc = new DialedCallReport(C, dialedCallMatch, line);
                 ParseAndPublishDialedCall(dc);
