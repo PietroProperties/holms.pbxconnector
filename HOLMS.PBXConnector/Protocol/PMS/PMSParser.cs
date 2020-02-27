@@ -44,6 +44,7 @@ namespace HOLMS.PBXConnector.Protocol.PMS {
                 ParseAndPublishRoomStatus(roomStatusUpdateMatch);
             } else {
                 Log.LogWarning($"Ignoring unrecognized input line {line}");
+                Log.LogWarning($"Ignoring unrecognized input line {line?.Trim()}PMS Parser end of line");
             }
         }
 

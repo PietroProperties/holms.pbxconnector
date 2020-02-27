@@ -37,6 +37,7 @@ namespace HOLMS.PBXConnector.Protocol.SMDR {
             }
 
             Log.LogWarning($"Ignoring unrecognized input line {line}");
+            Log.LogWarning($"Ignoring unrecognized input line {line?.Trim()}SMDR Parser end of line");
         }
 
         private void ParseAndPublishDialedCall(DialedCallReport rp) {
