@@ -92,8 +92,8 @@ namespace HOLMS.PBXConnector.Connector {
             _log.LogInformation("Stopping PBXConnector service");
             _pingResponder?.Stop();
 
-            _smdrParserThread?.Join();
-            _pingResponderThread?.Join();
+            _smdrParserThread?.Join(5);
+            _pingResponderThread?.Join(5);
             _pmsParserThread?.Join(5);
 
             _smdrParser = null;
