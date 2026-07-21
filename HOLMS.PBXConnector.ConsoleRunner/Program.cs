@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using HOLMS.PBXConnector.Support;
 using HOLMS.PBXConnector.Connector;
 using HOLMS.Platform.Client;
@@ -12,7 +13,11 @@ using Microsoft.Extensions.Logging;
  */
 namespace HOLMS.PBXConnector.ConsoleRunner {
     class Program {
+        private const string GrpcDefaultSslRootsEnvVar = "GRPC_DEFAULT_SSL_ROOTS_FILE_PATH";
+
         static void Main(string[] args) {
+            ConfigureGrpcTrust();
+
             var log = GetProductionLogger();
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -39,6 +44,23 @@ namespace HOLMS.PBXConnector.ConsoleRunner {
             lf.AddConsole();
 
             return lf.CreateLogger("HOLMS.PBXConnector.ConsoleRunner");
+        }
+
+        private static void ConfigureGrpcTrust() {
+            var standardRootCaBundlePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                "HOLMS",
+                "Certificates",
+                "holms-root-ca.pem");
+
+            if (!File.Exists(standardRootCaBundlePath)) {
+                return;
+            }
+
+            Environment.SetEnvironmentVariable(
+                GrpcDefaultSslRootsEnvVar,
+                standardRootCaBundlePath,
+                EnvironmentVariableTarget.Process);
         }
     }
 }

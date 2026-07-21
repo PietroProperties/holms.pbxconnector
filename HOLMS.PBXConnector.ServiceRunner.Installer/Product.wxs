@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-  <Product Id="*" Name="HOLMS PBXConnector" Language="1033" Version="!(bind.fileVersion.ServiceRunner)" Manufacturer="shortbar" UpgradeCode="90dc6e59-ec70-4bf6-bf2f-0fd16f0538f7">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+  <Package Name="HOLMS PBXConnector" Language="1033" Version="$(var.FullVersion)" Manufacturer="shortbar" UpgradeCode="90dc6e59-ec70-4bf6-bf2f-0fd16f0538f7" InstallerVersion="200" Compressed="yes" Scope="perMachine">
     <Media Id="1" Cabinet="HOLMSAppServer.cab" EmbedCab="yes" />
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
@@ -10,7 +9,11 @@
       <ComponentRef Id="PBXConnector" />
       <ComponentRef Id="RegistrySettings" />
     </Feature>
-  </Product>
+  </Package>
+
+  <Fragment>
+    <PropertyRef Id="NETFRAMEWORK40CLIENTINSTALLROOTDIR64" />
+  </Fragment>
 
   <Fragment>
     <Property Id="APPSVCIPPORTVALUE" Value="NotSet">
@@ -32,8 +35,7 @@
       <RegistrySearch Id="PMSConnectionStringLookup" Root="HKLM" Key="SOFTWARE\HOLMS\PBXConnector" Type="raw" Name="PMSConnectionString" />
     </Property>
 
-    <DirectoryRef Id="TARGETDIR">
-      <Component Id="RegistrySettings" Guid="E9CE6A56-10F1-4A0F-9A49-8D3C3A8504EC" Permanent="yes">
+      <Component Id="RegistrySettings" Guid="E9CE6A56-10F1-4A0F-9A49-8D3C3A8504EC" Permanent="yes" Directory="TARGETDIR">
         <RegistryKey Root="HKLM" Key ="SOFTWARE\HOLMS\PBXConnector">
           <RegistryValue Type="string" Name="AppSvcIPPort" Value="[APPSVCIPPORTVALUE]" />
           <RegistryValue Type="string" Name="RabbitHost" Value="[RABBITHOSTVALUE]" />
@@ -43,15 +45,13 @@
           <RegistryValue Type="string" Name="PMSConnectionString" Value="[PMSCONNECTIONSTRINGVALUE]" />
         </RegistryKey>
       </Component>
-    </DirectoryRef>
   </Fragment>
 
   <Fragment>
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFiles64Folder">
+      <StandardDirectory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="HOLMS">
           <Directory Id="ServiceDirectory" Name="PBXConnector" FileSource="..\HOLMS.PBXConnector.ServiceRunner\bin\$(var.Configuration)\net471">
-            <Component Id="PBXConnector" Guid="5772AD2E-21D4-49EE-BCD1-02CA3F123459" Win64="yes">
+            <Component Id="PBXConnector" Guid="5772AD2E-21D4-49EE-BCD1-02CA3F123459" Bitness="always64">
               <!-- PBXConnector -->
               <File Id="ServiceRunner" Name="HOLMS.PBXConnector.ServiceRunner.exe" KeyPath="yes" DiskId="1" />
               <File Name="HOLMS.PBXConnector.ServiceRunner.exe.config" />
@@ -108,13 +108,12 @@
               </ServiceInstall>
 
               <util:EventSource Name="PBXConnector" Log="HOLMS"
-                                EventMessageFile="[NETFRAMEWORK40INSTALLROOTDIR]EventLogMessages.dll" />
+                                EventMessageFile="[NETFRAMEWORK40CLIENTINSTALLROOTDIR64]EventLogMessages.dll" />
               <ServiceControl Id="HOLMSPBXConnectorControl" Stop="uninstall" Remove="uninstall"
                               Name="HOLMSPBXConnectorService" Wait="yes"/>
             </Component>
           </Directory>
         </Directory>
-      </Directory>
-    </Directory>
+      </StandardDirectory>
   </Fragment>
 </Wix>

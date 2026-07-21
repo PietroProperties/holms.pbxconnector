@@ -71,7 +71,7 @@ namespace HOLMS.PBXConnector.Connector {
 
         private void TryLogin() {
             try {
-                var ssr = _ac.StartSession(_config.Username, _config.Password);
+                var ssr = _ac.StartSession(_config.Username, _config.Password, null);
                 switch (ssr.Result) {
                     case SessionSvcStartSessionResult.Success:
                         break;
